@@ -6,31 +6,18 @@ University of Notre Dame
 Project
 Collecting the data
 """
+import os
 
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
-
 from tweepy.utils import import_simplejson
+
+###############################################################################
 json = import_simplejson()
+output_f = ""
 
-# Please assign your keys strings to the variables below
-# Consumer keys
-consumer_key = "brJuLeztTTpno1Hz1Ni8Q4Q32"
-consumer_secret = "8IQYpmH5uAnSNpwZCQEdcBZNCbtinGTwXOV6fh0F3J5J6Ph9x9"
-
-# Access keys
-access_token="4870188693-nwxEmTrGC4WKAgzXCgxXbAEHfMOB5we4er8441S"
-access_token_secret="wfxWgX8ooHZy5W2ud5Bu7LeC2euhw9IgeoeH3PEvg0DCA"
-
-lon = 0
-lat = 1
-
-longitude_left_point = -86.33
-latitude_left_point = 41.63
-longitude_right_point = -86.20
-latitude_right_point = 41.74
-
+###############################################################################
 class StdOutListener(StreamListener):
 	n_good_tweets = 0
 
@@ -44,8 +31,7 @@ class StdOutListener(StreamListener):
 				return True
 			else:
 				if self.n_good_tweets < 1000000:
-					#print str(self.n_good_tweets) + ". " + text.encode("utf-8")
-					print raw_data
+					output_f.write(raw_data)
 					self.n_good_tweets += 1
 					return True
 				else:
@@ -57,12 +43,37 @@ class StdOutListener(StreamListener):
 	def on_error(self, status):
 		print status
 
+###############################################################################
+def get_twitter_keys(file_path):
+	with open(file_path) as twitter_keys_f:
+		twitter_keys_s = twitter_keys_f.read()
+		return json.loads(twitter_keys_s)
+
+def get_keywords(file_path):
+	with open(file_path) as keywords_f:
+		keywords = keywords_f.readlines()
+		keywords = [x.strip('\n') for x in keywords]
+		return keywords
+
+def def_new_output_from(file_path):
+	data_dir_list = os.listdir(file_path)
+
+	for i in range(listdir):
+		if "crawler_output" + i not in listdir:
+			output_f = open("crawler_output" + i, "w")
+			break
+
+###############################################################################
 if __name__ == '__main__':
-    l = StdOutListener()
-    auth = OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
+	
+	keys = get_twitter_keys("../apikeys/twitter_keys.json")
+	def_new_output_from("../data/crawler/")
 
-    filter_track = ['Zika', 'fever', 'joint pain', 'microcephaly', 'microcefalia', 'mosquitoes', 'mosquito', 'Aedes aegypti', 'mosquito', 'dengue', 'febre', 'fiebre', 'rash', 'muscle pain', 'dor no corpo', 'dolor en el cuerpo', 'dor nas juntas', 'red eyes', 'olho vermelho']
+	l = StdOutListener()
+	auth = OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
+	auth.set_access_token(keys['access_token'], keys['access_token_secret'])
 
-    stream = Stream(auth, l)
-    stream.filter(track = filter_track)
+	filter_track = get_keywords("param/crawler_keywords.txt")
+
+	stream = Stream(auth, l)
+	stream.filter(track = filter_track)

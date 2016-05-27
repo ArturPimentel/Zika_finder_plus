@@ -1,12 +1,11 @@
 """
-Created by Diandra Kubo and Artur Pimentel
-CSE 40437/60437 - Social Sensing and Cyber-Physical Systems 
-Spring 2016
-University of Notre Dame
-Project
+Zikafinder 1.01
+Created by Artur Pimentel
+Summer 2016 - University of Notre Dame
 Collecting the data
 """
 import os
+import sys
 
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
@@ -15,11 +14,20 @@ from tweepy.utils import import_simplejson
 
 ###############################################################################
 json = import_simplejson()
-output_f = ""
 
 ###############################################################################
 class StdOutListener(StreamListener):
 	n_good_tweets = 0
+	n_total_tweets = 0
+
+	def def_new_output_from(self, file_path):
+		data_dir_list = os.listdir(file_path)
+
+		for i in range(len(data_dir_list) + 1):
+			new_file_name = "crawler_output" + str(i) + ".json"
+			if new_file_name not in data_dir_list:
+				self.output_f = open(file_path + new_file_name, "w")
+				break
 
 	def on_data(self, raw_data):
 
@@ -30,9 +38,14 @@ class StdOutListener(StreamListener):
 			if text is None:
 				return True
 			else:
-				if self.n_good_tweets < 1000000:
-					output_f.write(raw_data)
+				if self.n_good_tweets < self.n_total_tweets:
+
+					self.output_f.write(raw_data)
+
 					self.n_good_tweets += 1
+					b = str(self.n_good_tweets) + "/" + str(self.n_total_tweets) + " tweets collected."
+					sys.stdout.write('\r' + b)
+
 					return True
 				else:
 					return False
@@ -55,25 +68,27 @@ def get_keywords(file_path):
 		keywords = [x.strip('\n') for x in keywords]
 		return keywords
 
-def def_new_output_from(file_path):
-	data_dir_list = os.listdir(file_path)
-
-	for i in range(listdir):
-		if "crawler_output" + i not in listdir:
-			output_f = open("crawler_output" + i, "w")
-			break
-
 ###############################################################################
 if __name__ == '__main__':
-	
-	keys = get_twitter_keys("../apikeys/twitter_keys.json")
-	def_new_output_from("../data/crawler/")
 
-	l = StdOutListener()
-	auth = OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
-	auth.set_access_token(keys['access_token'], keys['access_token_secret'])
+	if len(sys.argv) != 2:
+		print "Wrong number of args. Command should be:"
+		print "python tweet_sampler.py [# of tweets to be collected]"
 
-	filter_track = get_keywords("param/crawler_keywords.txt")
+	elif int(sys.argv[1]) <= 0:
+		print "# of tweets to be collected has to be a positive integer value"
 
-	stream = Stream(auth, l)
-	stream.filter(track = filter_track)
+	else:
+		keys = get_twitter_keys("../apikeys/twitter_keys.json")
+
+		l = StdOutListener()
+		l.def_new_output_from("../data/crawler/")
+		l.n_total_tweets = int(sys.argv[1])
+
+		auth = OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
+		auth.set_access_token(keys['access_token'], keys['access_token_secret'])
+
+		filter_track = get_keywords("param/crawler_keywords.txt")
+
+		stream = Stream(auth, l)
+		stream.filter(track = filter_track)

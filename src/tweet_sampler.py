@@ -19,6 +19,8 @@ json = import_simplejson()
 class StdOutListener(StreamListener):
 	n_good_tweets = 0
 	n_total_tweets = 0
+	symptoms_keywords = []
+	vector_keywords = []
 
 	def def_new_output_from(self, file_path):
 		data_dir_list = os.listdir(file_path)
@@ -28,6 +30,15 @@ class StdOutListener(StreamListener):
 			if new_file_name not in data_dir_list:
 				self.output_f = open(file_path + new_file_name, "w")
 				break
+
+	def is_in_both_klists(self, text):
+		text = text.lower()
+		for skw in self.symptoms_keywords:
+			if skw in text:
+				for vkw in self.vector_keywords:
+					if vkw in text:
+						return True
+		return False
 
 	def on_data(self, raw_data):
 
@@ -39,13 +50,13 @@ class StdOutListener(StreamListener):
 				return True
 			else:
 				if self.n_good_tweets < self.n_total_tweets:
+					if self.is_in_both_klists(text):
+						self.output_f.write(raw_data)
 
-					self.output_f.write(raw_data)
-
-					self.n_good_tweets += 1
-					b = str(self.n_good_tweets) + "/" + str(self.n_total_tweets) + " tweets collected."
-					sys.stdout.write('\r' + b)
-
+						self.n_good_tweets += 1
+						b = (str(self.n_good_tweets) + "/" + 
+							str(self.n_total_tweets) + " tweets collected.")
+						sys.stdout.write('\r' + b)
 					return True
 				else:
 					return False
@@ -86,9 +97,12 @@ if __name__ == '__main__':
 		l.n_total_tweets = int(sys.argv[1])
 
 		auth = OAuthHandler(keys['consumer_key'], keys['consumer_secret'])
-		auth.set_access_token(keys['access_token'], keys['access_token_secret'])
+		auth.set_access_token(keys['access_token'], 
+							  keys['access_token_secret'])
 
-		filter_track = get_keywords("param/crawler_keywords.txt")
-
+		l.symptoms_keywords = get_keywords("param/crawler_keywords_symptoms.txt")
+		l.vector_keywords = get_keywords("param/crawler_keywords_vector.txt")
+		filter_track = l.symptoms_keywords + l.vector_keywords
+		
 		stream = Stream(auth, l)
 		stream.filter(track = filter_track)

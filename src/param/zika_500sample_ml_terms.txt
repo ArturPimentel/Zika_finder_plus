@@ -1,0 +1,70 @@
+# Common expressions
+c zika,100
+com zika,100
+cm zika,100
+era zika,100
+pegar zika,100
+pega zika,100
+pego zika,100
+peguei zika,100
+pegando zika,100
+tava de zika,100
+con zika,100
+tengo zika,100
+me ataco,100
+tuve zika,100
+#de zika,100
+zika me pico,100
+zika me pegou,100
+##############################################
+# Common acompanying words (positives)
+dolor,60
+dor,60
+tosse,60
+fiebre,60
+coça,60
+pelota,60
+conjuntivite,60
+de cama,60
+@,50
+deus,80
+ruim,80
+raiva,80
+chata,80
+desgraça,80
+inferno,80
+forte,80
+me matou,80
+morreu,80
+medico,80
+positive,80
+suspeita,80
+suspect,80
+sufriendo,80
+sofrendo,80
+recovering,80
+recuperando,80
+recuperei,80
+melhor,80
+puto,80
+puta,80
+##############################################
+# Common acompanying words (negatives)
+rt ,-150
+?,-80
+#,-80
+chikungunya,-80
+kkk,-80
+jajaja,-80
+hahaha,-80
+chikunguña,-80
+dengue,-80
+nunca,-80
+não ,-80
+no ,-80
+acho,-50
+achando,-50
+deve,-50
+medo,-50
+sera,-50
+😂,-50

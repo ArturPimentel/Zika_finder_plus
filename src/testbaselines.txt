@@ -1,0 +1,47 @@
+Naive-Bayes
+0.863377609108
+             precision    recall  f1-score   support
+
+ irrelevant       0.86      1.00      0.93       448
+   relevant       1.00      0.09      0.16        79
+
+avg / total       0.88      0.86      0.81       527
+
+[[448   0]
+ [ 72   7]]
+-----------------------------------------------------------------------
+SVM
+0.990512333966
+             precision    recall  f1-score   support
+
+ irrelevant       0.99      1.00      0.99       448
+   relevant       0.99      0.95      0.97        79
+
+avg / total       0.99      0.99      0.99       527
+
+[[447   1]
+ [  4  75]]
+-----------------------------------------------------------------------
+Logistic Regression
+0.851992409867
+             precision    recall  f1-score   support
+
+ irrelevant       0.85      1.00      0.92       448
+   relevant       1.00      0.01      0.02        79
+
+avg / total       0.87      0.85      0.79       527
+
+[[448   0]
+ [ 78   1]]
+-----------------------------------------------------------------------
+Decision Tree
+1.0
+             precision    recall  f1-score   support
+
+ irrelevant       1.00      1.00      1.00       448
+   relevant       1.00      1.00      1.00        79
+
+avg / total       1.00      1.00      1.00       527
+
+[[448   0]
+ [  0  79]]

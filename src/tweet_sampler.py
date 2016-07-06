@@ -50,13 +50,16 @@ class StdOutListener(StreamListener):
 				return True
 			else:
 				if self.n_good_tweets < self.n_total_tweets:
+					"""
 					if self.is_in_both_klists(text):
-						self.output_f.write(raw_data)
+					"""
+					self.output_f.write(raw_data)
 
-						self.n_good_tweets += 1
-						b = (str(self.n_good_tweets) + "/" + 
-							str(self.n_total_tweets) + " tweets collected.")
-						sys.stdout.write('\r' + b)
+					self.n_good_tweets += 1
+					b = (str(self.n_good_tweets) + "/" + 
+						str(self.n_total_tweets) + " tweets collected.")
+					sys.stdout.write('\r' + b)	
+
 					return True
 				else:
 					return False

@@ -1,0 +1,69 @@
+# Common expressions
+c dengue,100
+com dengue,100
+cm dengue,100
+era dengue,100
+pegar dengue,100
+pega dengue,100
+pego dengue,100
+peguei dengue,100
+pegando dengue,100
+tava de dengue,100
+con dengue,100
+tengo dengue,100
+me ataco,100
+tuve dengue,100
+#de dengue,100
+dengue me pico,100
+dengue me pegou,100
+##############################################
+# Common acompanying words (positives)
+dolor,60
+dor,60
+tosse,60
+fiebre,60
+coça,60
+pelota,60
+conjuntivite,60
+de cama,60
+@,50
+deus,80
+ruim,80
+raiva,80
+chata,80
+desgraça,80
+inferno,80
+forte,80
+me matou,80
+morreu,80
+medico,80
+positive,80
+suspeita,80
+suspect,80
+sufriendo,80
+sofrendo,80
+recovering,80
+recuperando,80
+recuperei,80
+melhor,80
+puto,80
+puta,80
+##############################################
+# Common acompanying words (negatives)
+rt ,-150
+?,-80
+chikungunya,-80
+kkk,-80
+jajaja,-80
+hahaha,-80
+chikunguña,-80
+zika,-80
+nunca,-80
+não ,-80
+no ,-80
+acho,-50
+achando,-50
+deve,-50
+medo,-50
+sera,-50
+😂,-50

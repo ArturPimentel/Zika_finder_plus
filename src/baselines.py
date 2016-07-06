@@ -1,13 +1,14 @@
 import sys
 import os
 import numpy as np
+import matplotlib.pyplot as plt
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import SGDClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn import tree
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.pipeline import Pipeline
 from sklearn import metrics
 
@@ -29,6 +30,34 @@ def group_lines(file_lines):
 			text += line
 
 	return texts
+
+def pipeline_and_evaluate(data, labels, clf_model, model_name):
+	text_clf = Pipeline([('vect', CountVectorizer()),
+							('tfidf', TfidfTransformer()),
+							('clf', clf_model)])
+
+	text_clf = text_clf.fit(data, labels)
+	predicted = text_clf.predict(data)
+	#y_pred = text_clf.predict_proba()
+
+	print model_name
+	print np.mean(predicted == labels)
+	print metrics.classification_report(labels, predicted,
+										target_names = ['irrelevant', 'relevant'])
+	print metrics.confusion_matrix(labels, predicted)
+
+	"""fp_rates, tp_rates, _ = metrics.roc_curve(data, predicted)
+				plt.figure(1)
+				plt.plot([0, 1], [0, 1], 'k--')
+				plt.plot(fp_rates, tp_rates, label=model_name)
+				plt.xlabel('False positive rate')
+				plt.ylabel('True positive rate')
+				plt.title('ROC curve')
+				plt.legend(loc='best')
+				plt.savefig("roc_" + model_name + ".png")"""
+
+	print "-----------------------------------------------------------------------"
+
 
 if __name__ == '__main__':
 	ml_file = sys.argv[1]
@@ -55,65 +84,26 @@ if __name__ == '__main__':
 			tweets_train.data.append(text[2:])
 
 		# Naive-Bayes baseline
-		text_nb_clf = Pipeline([('vect', CountVectorizer()),
-							 ('tfidf', TfidfTransformer()),
-							 ('clf', MultinomialNB())])
 
-		text_nb_clf = text_nb_clf.fit(tweets_train.data, tweets_train.labels)
-		tweets_test = tweets_train.data
-
-		predicted = text_nb_clf.predict(tweets_test)
-		print "Naive-Bayes"
-		print np.mean(predicted == tweets_train.labels)
-
-		print metrics.classification_report(tweets_train.labels, predicted,
-    										target_names = ['irrelevant', 'relevant'])
-
-		print metrics.confusion_matrix(tweets_train.labels, predicted)
-		print "-----------------------------------------------------------------------"
-
-		# SVM baseline
-		text_svm_clf = Pipeline([('vect', CountVectorizer()),
-								 ('tfidf', TfidfTransformer()),
-								 ('clf', SGDClassifier(loss = 'hinge', penalty = 'l2',
-													   alpha = 1e-3, n_iter = 5, random_state = 42))])
-
-		text_svm_clf = text_svm_clf.fit(tweets_train.data, tweets_train.labels)
-		predicted = text_svm_clf.predict(tweets_test)
-		print "SVM"
-		print np.mean(predicted == tweets_train.labels)
-		print metrics.classification_report(tweets_train.labels, predicted,
-    										target_names = ['irrelevant', 'relevant'])
-		print metrics.confusion_matrix(tweets_train.labels, predicted)
-
-		print "-----------------------------------------------------------------------"
-
-		# Logistic Regression baseline
-		text_lr_clf = Pipeline([('vect', CountVectorizer()),
-								 ('tfidf', TfidfTransformer()),
-								 ('clf', LogisticRegression(C=1, penalty='l1', tol=0.01))])
-
-
-		text_lr_clf = text_lr_clf.fit(tweets_train.data, tweets_train.labels)
-		predicted = text_lr_clf.predict(tweets_test)
-		print "Logistic Regression"
-		print np.mean(predicted == tweets_train.labels)
-		print metrics.classification_report(tweets_train.labels, predicted,
-    										target_names = ['irrelevant', 'relevant'])
-		print metrics.confusion_matrix(tweets_train.labels, predicted)
-
-		print "-----------------------------------------------------------------------"
-
-		# Decision Tree baseline
-		text_tree_clf = Pipeline([('vect', CountVectorizer()),
-								 ('tfidf', TfidfTransformer()),
-								 ('clf', tree.DecisionTreeClassifier())])
-
-
-		text_tree_clf = text_tree_clf.fit(tweets_train.data, tweets_train.labels)
-		predicted = text_tree_clf.predict(tweets_test)
-		print "Decision Tree"
-		print np.mean(predicted == tweets_train.labels)
-		print metrics.classification_report(tweets_train.labels, predicted,
-    										target_names = ['irrelevant', 'relevant'])
-		print metrics.confusion_matrix(tweets_train.labels, predicted)
+		pipeline_and_evaluate(tweets_train.data,
+							  tweets_train.labels,
+							  MultinomialNB(),
+							  "Naive-Bayes")
+		pipeline_and_evaluate(tweets_train.data,
+							  tweets_train.labels,
+							  SGDClassifier(loss = 'hinge',
+							  				penalty = 'l2',
+											alpha = 1e-3,
+											n_iter = 5,
+											random_state = 42),
+							  "SVM")
+		pipeline_and_evaluate(tweets_train.data,
+							  tweets_train.labels,
+							  LogisticRegression(C=10000,
+							  					 penalty='l1',
+							  					 tol=0.01),
+							  "Logistic_Regression")
+		pipeline_and_evaluate(tweets_train.data,
+							  tweets_train.labels,
+							  DecisionTreeClassifier(),
+							  "Decision_Tree")

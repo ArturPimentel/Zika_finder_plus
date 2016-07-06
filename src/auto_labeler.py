@@ -54,9 +54,9 @@ if __name__ == '__main__':
 		# open the five results files for this analysis
 		with open(directory + "/auto_label_fn.txt", "w") as o_fn, \
 			 open(directory + "/auto_label_fp.txt", "w") as o_fp, \
-			 open(directory + "/auto_label_pm.txt", "w") as o_pm, \
-			 open(directory + "/auto_label_um.txt", "w") as o_um, \
-			 open(directory + "/auto_label_nm.txt", "w") as o_nm:
+			 open(directory + "/auto_label_tp.txt", "w") as o_pm, \
+			 open(directory + "/auto_label_tu.txt", "w") as o_um, \
+			 open(directory + "/auto_label_tn.txt", "w") as o_nm:
 			# read the file with the manually labeled tweets
 			lines = f.readlines()
 			labeled_texts = group_lines(lines)

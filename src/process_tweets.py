@@ -139,7 +139,7 @@ class Process():
 			known_locations = self.load_known_locations(filename)
 		known_locations_names = [self.format(kl.name) for kl in known_locations]
 
-		textlocf = open("textlocftrain.txt", "w")
+		textlocf = open("textlocf.txt", "w")
 		# Prepare tweet list
 		with open(filename, 'a') as city_coordinates_f:
 			loc_finder = LocationFinder()

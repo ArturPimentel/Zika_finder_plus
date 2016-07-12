@@ -67,7 +67,8 @@ if __name__ == '__main__':
 	test_file = sys.argv[2]
 	with open("../data/samples_texts/" + ml_file) as f, \
 		 open("../data/samples_texts/" + test_file) as tf, \
-		 open("textlocf.txt") as tlf:
+		 open("textlocf.txt") as test_tlf, \
+		 open("textlocftrain.txt") as train_tlf:
 
 		# read the files with the manually labeled tweets
 		lines = f.readlines()
@@ -78,8 +79,11 @@ if __name__ == '__main__':
 		tlabeled_texts = group_lines(tlines)
 		tweets_test = TweetsAndLabels([], [])
 
-		tllines = tlf.readlines()
-		tllines_texts = group_lines(tllines)
+		train_tllines = tlf.readlines()
+		train_tllines_texts = group_lines(train_tllines)
+
+		test_tllines = tlf.readlines()
+		test_tllines_texts = group_lines(test_tllines)
 
 		n_pos = 0
 		n_neg = 0
@@ -113,7 +117,10 @@ if __name__ == '__main__':
 				tweets_test.labels.append(0)
 			#tweets_test.data.append(text[2:])
 
-		for text in tllines_texts:
+		for text in train_tllines_texts:
+			tweets_train.data.append(text)
+
+		for text in test_tllines_texts:
 			tweets_test.data.append(text)
 
 		print n_pos, n_neg

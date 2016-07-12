@@ -72,7 +72,7 @@ if __name__ == '__main__':
 		# Make a list of texts with separeted label
 		texts = [[text[0:1], text[2:]] for text in labeled_texts]
 
-		for ythreshold in xrange(-340, 180):
+		for ythreshold in xrange(-420, 240):
 			for l_text in texts:
 				label = l_text[0]
 				text = l_text[1]
@@ -116,17 +116,17 @@ if __name__ == '__main__':
 		axes.set_xlim([0,1])
 		axes.set_ylim([0,1])
 
-		score = -340
+		score = -420
 		for i, j in zip(fprates, tprates):
 			if score % 40 == 0:
 				ax.annotate('%d' % score, xy = (i, j), textcoords = 'data')
 			score += 1
 
-		print b_score
-		print l_score
+		#print b_score
+		#print l_score
 
 		# This is the AUC
 		auc = np.trapz(list(reversed(tprates)), list(reversed(fprates)))
 
-		fig.suptitle(('ROC zika filter 1 (AUC = %.3f' % auc) + ')', fontsize=20)
-		plt.savefig("plot_roc_zika.png")
+		fig.suptitle(('ROC dengue 2000 filter 1 (AUC = %.3f' % auc) + ')', fontsize=20)
+		plt.savefig("plot_roc_dengue2000.png")

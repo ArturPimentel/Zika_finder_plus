@@ -122,7 +122,7 @@ class Process():
 			log.write(str(n_old_userloc_tweets) + " processed user locations\n")
 			log.write(str(n_geotag_tweets) + " are geotagged tweets\n")
 			log.write(str(n_loc_tweets) + " of " + str(len(self.tweets)) + 
-					" had location. " + str(float(n_loc_tweets)/float(len(self.tweets))*100) + 
+					" had specific location. " + str(float(n_loc_tweets)/float(len(self.tweets))*100) + 
 					"%\n")
 
 	def process(self):
@@ -139,6 +139,7 @@ class Process():
 			known_locations = self.load_known_locations(filename)
 		known_locations_names = [self.format(kl.name) for kl in known_locations]
 
+		textlocf = open("textlocftrain.txt", "w")
 		# Prepare tweet list
 		with open(filename, 'a') as city_coordinates_f:
 			loc_finder = LocationFinder()
@@ -162,6 +163,8 @@ class Process():
 					n_loc_tweets += 1
 
 					self.treated_tweets.append(treated_tweet)
+					textlocf.write(self.format(treated_tweet['text']))
+					textlocf.write("\n==============================================================================================================================================\n")
 				# if the tweet is not geotagged, but the user profile provides a city of origin
 				elif tweet['user']['location'] != None:
 					user_location = self.format(tweet['user']['location'])
@@ -178,8 +181,11 @@ class Process():
 							treated_tweet['longitude'] = loc.longitude
 							treated_tweet['latitude'] = loc.latitude
 							city_coordinates_f.write("%s,%s,\"%s\"\n" % 
-													(loc.latitude, loc.longitude, loc.name))
+													(loc.latitude, loc.longitude, self.format(loc.name)))
 							n_new_userloc_tweets += 1
+
+							textlocf.write(self.format(treated_tweet['text']) + " (" + self.format(loc.name) + ")")
+							textlocf.write("\n==============================================================================================================================================\n")
 					else:
 						index = known_locations_names.index(user_location)
 						treated_tweet['longitude'] = known_locations[index].longitude
@@ -191,10 +197,11 @@ class Process():
 					n_loc_tweets += 1
 				else:
 					# Use a method of inferring the tweet location
-					pass
+					textlocf.write(self.format(treated_tweet['text']))
+					textlocf.write("\n==============================================================================================================================================\n")
 
-		write_csv()
-		write_log(n_new_userloc_tweets, n_old_userloc_tweets, n_geotag_tweets, n_loc_tweets)
+		self.write_csv()
+		self.write_log(n_new_userloc_tweets, n_old_userloc_tweets, n_geotag_tweets, n_loc_tweets)
 
 if __name__ == "__main__":
 	Process(sys.argv[1], '../data/dataset_samples/')

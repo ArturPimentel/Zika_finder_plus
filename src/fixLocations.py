@@ -12,6 +12,7 @@ import os
 import json
 import numpy as np
 
+from pprint import pprint
 from place import Place
 from datetime import datetime
 
@@ -49,6 +50,31 @@ class LocationFinder():
 		response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?key=%s&address=%s' %
 								(self.gmaps_keys[self.key_index], location.replace(' ', '+')))
 		json_wrapper.setJSON(response.json())
+		resp_status = json_wrapper.json['status']
+
+		while resp_status == u'OVER_QUERY_LIMIT' or resp_status == u'REQUEST_DENIED':
+			self.key_index += 1
+			#log_file.write('Changing key: ' + str(self.key_index) + '\n')
+
+			if self.key_index > (len(self.gmaps_keys)-1):
+				#log_file.write('Keys ended' + '\n')
+				return None
+			else:
+				response = requests.get('https://maps.googleapis.com/maps/api/geocode/json?key=%s&address=%s' %
+								(self.gmaps_keys[self.key_index], location.replace(' ', '+')))
+				json_wrapper.setJSON(response.json())
+				resp_status = json_wrapper.json['status']
+
+		city_found = False
+		for place in json_wrapper.json['results'][0]['address_components']:
+			place_type = place[u'types']
+			if cmp(place_type, [u'locality', u'political']) == 0:
+				location = place['short_name']
+				city_found = True
+				break
+		if not city_found:
+			return None
+
 		latitude = json_wrapper.json['results'][0]['geometry']['location']['lat']
 		longitude = json_wrapper.json['results'][0]['geometry']['location']['lng']
 
@@ -65,15 +91,6 @@ class LocationFinder():
 				log_file.write(location + e.args[0] + '\n')
 				log_file.write('STATUS: ' + resp_status + '\n')
 
-				if resp_status == u'OVER_QUERY_LIMIT' or resp_status == u'REQUEST_DENIED':
-					self.key_index += 1
-					log_file.write('Changing key: ' + str(self.key_index) + '\n')
-
-					if self.key_index > (len(self.gmaps_keys)-1):
-						log_file.write('Keys ended' + '\n')
-						return None
-					else:
-						return self.make_api_request(location, resp_json_payload)
-				elif e.args[0] != 'list index out of range' or resp_status != u'ZERO_RESULTS':
+				if e.args[0] != 'list index out of range' or resp_status != u'ZERO_RESULTS':
 					log_file.write(str(resp_json_payload.json))
 					return None

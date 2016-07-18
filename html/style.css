@@ -1,0 +1,160 @@
+body{
+  position: relative;
+  margin:0;
+  padding: 0;
+  color:#666;
+  font-family: 'Patua One', cursive;
+  font-size: 12px;
+  text-align: center; 
+}
+img,
+embed,
+object,
+video {
+ max-width: 100%;
+ height: auto;
+}
+
+p{
+	margin: 20px;
+	font-family: 'Patua One', cursive;
+	  font-size: 12px;
+	  text-align: center; 
+}
+
+#Titulo{
+	font-family: 'Patua One', cursive;
+	text-align: center;
+	font-size:40px;
+	padding: 0.5em;
+}
+
+#BarraLateral{
+	float: left;
+	margin: 100px 0;
+	width: 20%;
+	display: inline-block;
+}
+
+#Corpo{
+	margin: 0 0;
+	width: 80%;
+	display: inline-block;
+}
+
+#Menu{
+  text-align: center;
+  margin: 20px auto 0;
+  padding: 10px 0;
+
+}
+#Mapa {
+        margin-left: auto;
+        margin-right: auto;        
+        width: 1100px;
+        height: 600px;
+}
+
+#TituloPrincipal{
+  text-align: center;
+  font-size: 40pt;
+  margin: 10px auto 0;
+  padding: 20px 0 5px;
+  background-image: url("../title.png") ;
+  background-repeat: no-repeat;
+  height: 100px;/*125px;*/
+  max-width:  955px;/*1194px;*/
+}
+
+#SubtituloPrincipal{
+  text-align: center;
+  font-size: 25pt;
+  margin: 0 auto;
+  padding: 10px;
+  color: black;
+}
+
+#CorpoPrincipal{
+  font-size: 16px;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: black;
+  background-color: white;
+  width: 90%;
+  margin: 10px auto;
+  padding: 10px 10px;
+  display: inline-block;
+
+}
+
+#CorpoPrincipal .texto{
+  float:left;
+  margin: 0 0;
+  display: inline-block;
+  width:80%;
+}
+
+#CorpoPrincipal .imagem{
+  /*float:right;*/
+  margin: 0 0;
+  display: inline-block;
+  width:20%;
+}
+
+#CorpoPrincipal p{
+  color: #666;
+  margin: 10px auto;
+  width: 50%;
+  text-align: justify;
+
+}
+
+#CorpoPrincipal li{
+  text-align: left;
+  margin: 0 100px 0;
+}
+
+#CorpoPrincipal a{
+  color: #191970;
+}
+
+#CorpoPrincipal img{
+  margin: 10px 0;
+}
+
+.Separador{
+  margin: 10px auto;
+  padding: 0 0;
+  width: 100%;
+}
+
+footer {
+  padding: 100px 0 40px;
+}
+
+#Foto {
+	border-radius: 50%;
+	border-style: solid;
+    border-width: 5px;
+	height: 200px;
+	width: 200px;
+	background-image: url("mosquito.png") ;
+  	background-repeat: no-repeat;
+  	margin: 30px auto 20px;
+	padding: 10px 0;
+}
+
+.ItemMenu{
+  font-family: 'Patua One', cursive;
+  font-size: 20px;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: black;
+  background-color: #ccc;
+  margin: 10px;
+}
+
+.ItemMenu a, a:visited{
+  color: black;
+
+}

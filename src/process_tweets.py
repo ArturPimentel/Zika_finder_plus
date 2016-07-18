@@ -163,7 +163,7 @@ class Process():
 					n_loc_tweets += 1
 
 					self.treated_tweets.append(treated_tweet)
-					textlocf.write(self.format(treated_tweet['text']))
+					textlocf.write("()" + self.format(treated_tweet['text']))
 					textlocf.write("\n==============================================================================================================================================\n")
 				# if the tweet is not geotagged, but the user profile provides a city of origin
 				elif tweet['user']['location'] != None:
@@ -175,6 +175,8 @@ class Process():
 						# If it wasn't successful, consider as type 3
 						if loc == None:
 							#Use type 3 method for inferring location, for now, don't append to the list and continue loop
+							textlocf.write(self.format(treated_tweet['text']))
+							textlocf.write("\n==============================================================================================================================================\n")
 							continue
 						# Otherwise, write location to the known locations file
 						else:
@@ -184,20 +186,22 @@ class Process():
 													(loc.latitude, loc.longitude, self.format(loc.name)))
 							n_new_userloc_tweets += 1
 
-							textlocf.write(self.format(treated_tweet['text']) + " (" + self.format(loc.name) + ")")
+							textlocf.write("(" + self.format(loc.name) + ")" + self.format(treated_tweet['text']))
 							textlocf.write("\n==============================================================================================================================================\n")
 					else:
 						index = known_locations_names.index(user_location)
 						treated_tweet['longitude'] = known_locations[index].longitude
 						treated_tweet['latitude'] = known_locations[index].latitude
 						n_old_userloc_tweets+=1
+						textlocf.write("(" + user_location + ")" + self.format(treated_tweet['text']))
+						textlocf.write("\n==============================================================================================================================================\n")
 		 			
 		 			treated_tweet['loc_type'] = 'User profile'
 					self.treated_tweets.append(treated_tweet)
 					n_loc_tweets += 1
 				else:
 					# Use a method of inferring the tweet location
-					textlocf.write(self.format(treated_tweet['text']))
+					textlocf.write("()" + self.format(treated_tweet['text']))
 					textlocf.write("\n==============================================================================================================================================\n")
 
 		self.write_csv()

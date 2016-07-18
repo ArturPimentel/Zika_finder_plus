@@ -31,12 +31,12 @@ def group_lines(file_lines):
 
 	return texts
 
-def pipeline_and_evaluate(data, labels, test_data, test_labels, clf_model, model_name):
+def pipeline_and_evaluate(train_data, train_labels, test_data, test_labels, clf_model, model_name):
 	text_clf = Pipeline([('vect', CountVectorizer()),
-							('tfidf', TfidfTransformer()),
-							('clf', clf_model)])
+						('tfidf', TfidfTransformer()),
+						('clf', clf_model)])
 
-	text_clf = text_clf.fit(data, labels)
+	text_clf = text_clf.fit(train_data, train_labels)
 	examples = ["To com dengue", "Tengo dengue", "I have dengue", "Descobri que tive dengue e passei para ele", "Second time admitted in hospital due to dengue fever. Its not cool.", "\"vamo sair\" \"nao da, to com dengue\" Que tipo de ser humano sou eu", "Learn more about dengue here at the VRP Medical Center Official Facebook Page. Also, before the month of June... http://fb.me/H89X6IVB"]
 	probas_ = []
 	fp_rates = []
@@ -66,9 +66,7 @@ if __name__ == '__main__':
 	ml_file = sys.argv[1]
 	test_file = sys.argv[2]
 	with open("../data/samples_texts/" + ml_file) as f, \
-		 open("../data/samples_texts/" + test_file) as tf, \
-		 open("textlocf.txt") as test_tlf, \
-		 open("textlocftrain.txt") as train_tlf:
+		 open("../data/samples_texts/" + test_file) as tf:
 
 		# read the files with the manually labeled tweets
 		lines = f.readlines()
@@ -79,16 +77,10 @@ if __name__ == '__main__':
 		tlabeled_texts = group_lines(tlines)
 		tweets_test = TweetsAndLabels([], [])
 
-		train_tllines = tlf.readlines()
-		train_tllines_texts = group_lines(train_tllines)
-
-		test_tllines = tlf.readlines()
-		test_tllines_texts = group_lines(test_tllines)
-
 		n_pos = 0
 		n_neg = 0
 		for text in labeled_texts:
-			label = text[0:1]
+			label = text[0]
 			if label == "y":
 				tweets_train.labels.append(1)
 				n_pos += 1
@@ -105,7 +97,7 @@ if __name__ == '__main__':
 		n_neg = 0
 
 		for text in tlabeled_texts:
-			label = text[0:1]
+			label = text[0]
 			if label == "y":
 				n_pos += 1
 				tweets_test.labels.append(1)
@@ -115,13 +107,7 @@ if __name__ == '__main__':
 			elif label == "u":
 				n_neg += 1
 				tweets_test.labels.append(0)
-			#tweets_test.data.append(text[2:])
-
-		for text in train_tllines_texts:
-			tweets_train.data.append(text)
-
-		for text in test_tllines_texts:
-			tweets_test.data.append(text)
+			tweets_test.data.append(text[2:])
 
 		print n_pos, n_neg
 		
@@ -129,41 +115,51 @@ if __name__ == '__main__':
 		plt.plot([0, 1], [0, 1], 'k--')
 
 		# Naive-Bayes baseline
-		pipeline_and_evaluate(tweets_train.data,
-							  tweets_train.labels,
-							  tweets_test.data,
-							  tweets_test.labels,
-							  MultinomialNB(),
+		pipeline_and_evaluate(list(tweets_train.data),
+							  list(tweets_train.labels),
+							  list(tweets_test.data),
+							  list(tweets_test.labels),
+							  MultinomialNB(alpha=.01, fit_prior=True),
 							  "Naive-Bayes")
-		
-		pipeline_and_evaluate(tweets_train.data,
-							  tweets_train.labels,
-							  tweets_test.data,
-							  tweets_test.labels,
-							  SGDClassifier(loss = 'hinge',
-							  				penalty = 'l2',
-											alpha = 1e-3,
-											n_iter = 5,
-											random_state = None),
+		pipeline_and_evaluate(list(tweets_train.data),
+							  list(tweets_train.labels),
+							  list(tweets_test.data),
+							  list(tweets_test.labels),
+							  DecisionTreeClassifier(max_depth=8,
+							  						 class_weight={1:10}),
+							  "Decision_Tree")
+		pipeline_and_evaluate(list(tweets_train.data),
+							  list(tweets_train.labels),
+							  list(tweets_test.data),
+							  list(tweets_test.labels),
+							  SGDClassifier(loss='hinge',
+							  				penalty='l2',
+											alpha=1e-3,
+											n_iter=5,
+											random_state=None,
+											class_weight={1:10}),
 							  "SVM")
-		
-		pipeline_and_evaluate(tweets_train.data,
-							  tweets_train.labels,
-							  tweets_test.data,
-							  tweets_test.labels,
+		pipeline_and_evaluate(list(tweets_train.data),
+							  list(tweets_train.labels),
+							  list(tweets_test.data),
+							  list(tweets_test.labels),
 							  LogisticRegression(C=1,
 							  					 penalty='l2',
-							  					 tol=0.01),
+							  					 tol=0.01,
+							  					 class_weight={1:10}),
 							  "Logistic_Regression")
-		pipeline_and_evaluate(tweets_train.data,
-							  tweets_train.labels,
-							  tweets_test.data,
-							  tweets_test.labels,
-							  DecisionTreeClassifier(max_depth=7),
-							  "Decision_Tree")
+		pipeline_and_evaluate(list(tweets_train.data),
+							  list(tweets_train.labels),
+							  list(tweets_test.data),
+							  list(tweets_test.labels),
+							  MLPClassifier(algorithm='l-bfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1),
+							  "Neural_Network")
+		
+		
 
 		plt.xlabel('False positive rate')
 		plt.ylabel('True positive rate')
 		plt.title('ROC curve')
 		plt.legend(loc='best')
-		plt.savefig("roc_baselines_wl.png")
+		print "A"
+		plt.savefig("roc_baselines_all.png")

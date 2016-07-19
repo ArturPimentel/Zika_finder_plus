@@ -62,8 +62,8 @@ if __name__ == '__main__':
 					try:
 						friends_r = api.request('friends/ids', {'count':100, 'screen_name': tweet['user']['screen_name']})
 						got_friends = True
-						print friends_r
 					except TwitterError.TwitterRequestError:
+						print "Trying next friends request in 15 minutes\n"
 						log.write("Trying next friends request in 15 minutes\n")
 						time.sleep(SLEEP_TIME)
 
@@ -73,26 +73,26 @@ if __name__ == '__main__':
 						followers_r = api.request('followers/ids', {'count':1000, 'screen_name':tweet['user']['screen_name']})
 						got_followers = True
 					except TwitterError.TwitterRequestError:
+						print "Trying next followers request in 15 minutes\n"
 						log.write("Trying next followers request in 15 minutes\n")
 						time.sleep(SLEEP_TIME)
 
-				got_friends_iterator = False
-				while not got_friends_iterator:
-					try:
-						friends = set(friends_r.get_iterator())
-						got_friends_iterator = True
-					except TwitterError.TwitterRequestError:
-						log.write("Trying next friends iterator request in 15 minutes")
-						time.sleep(SLEEP_TIME)
+				print friends_r, followers_r
+				try:
+					friends = set(friends_r.response.json()["ids"])
+				except KeyError:
+					print "Trying next friends iterator request in 15 minutes\n"
+					log.write("Trying next friends iterator request in 15 minutes\n")
+					time.sleep(SLEEP_TIME)
+					continue
 
-				got_followers_iterator = False
-				while not got_followers_iterator:
-					try:
-						followers = set(followers_r.get_iterator())
-						got_followers_iterator = True
-					except TwitterError.TwitterRequestError:
-						log.write("Trying next followers iterator request in 15 minutes")
-						time.sleep(SLEEP_TIME)
+				try:
+					followers = set(followers_r.response.json()["ids"])
+				except KeyError:
+					print "Trying next followers iterator request in 15 minutes\n"
+					log.write("Trying next followers iterator request in 15 minutes\n")
+					time.sleep(SLEEP_TIME)
+					continue
 
 
 				connections = friends.intersection(followers)
@@ -110,5 +110,7 @@ if __name__ == '__main__':
 				gt_locs_f.write("," + most_common(connections_locations).encode('utf-8') + "\n")
 				n_locs_inf += 1
 			else:
+				print "Trying next general request in 15 minutes\n"
+				log.write("Trying next general request in 15 minutes\n")
 				n_locs_inf += TWITTER_API_LIMIT
 				time.sleep(SLEEP_TIME)

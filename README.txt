@@ -1,4 +1,4 @@
-ZikaFinder+ v1.01
+ZikaFinder+ v1.22
 
 tweet_sampler.py
 	Collects data from twitter. It uses the keywords specified in src/param/crawler_keywords.txt to filter the search (one keyword per line in the text file). It also uses the authentication keys in apikeys/twitter_keys.json to run the tweepy API
@@ -9,11 +9,18 @@ process_tweets.py
 fixLocations.py
 	Calls the Google Geocoding API for each location description found to get the latitude and longitude 
 	Usage: python fixLocations.py 
-plota_mapas.py
-	Plots the maps for each combination of keywords
-	Usage: python plota_mapas.py output.csv
+location_inferencer.py
+	Infers the location for a user who does not provide one
 
-The order is:
+-------------------------------------------------------------------------------
+How to install dependencies:
+location_inferencer.py
+	For this one, install TwitterAPI and googlemaps Python packages:
+	> pip install TwitterAPI
+	> pip install googlemaps
+
+-------------------------------------------------------------------------------
+How to run the code:
 Run tweet_sampler to get your data on a json file stored in data/crawler. If using for the first time, create a folder apikeys/ at the root and save your keys in the format:
 
 {

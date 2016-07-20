@@ -134,8 +134,14 @@ if __name__ == '__main__':
 					if item['location'] != "":
 						# First substring before a comma usually is a city
 						connections_locations.append(item['location'].split(",")[0])
-
-			inference_r_str = most_common(connections_locations).encode('utf-8') + "\n"
+				else:
+					print item
+			if connections_locations:
+				inference_r_str = most_common(connections_locations).encode('utf-8')
+			else:
+				print "Trying next users locations request in 15 minutes\n"
+				log.write("Trying next users locations request in 15 minutes\n")
+				continue
 
 			gt_locs_f.write(username + "," + geocode_r_str + ","  + inference_r_str + "\n")
 			print username + "," + geocode_r_str + ","  + inference_r_str

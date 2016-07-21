@@ -26,7 +26,7 @@ xmlhttp.onreadystatechange = function() {
 		tweets = Papa.parse(xmlhttp.responseText, {
 			header: true,
 			complete: function(results) {
-				console.log(results);
+				//console.log(results);
 			}
 		});
 
@@ -52,7 +52,7 @@ xmlhttpZika.onreadystatechange = function() {
 		tweetsZika = Papa.parse(xmlhttpZika.responseText, {
 			header: true,
 			complete: function(results) {
-				console.log(results);
+				//console.log(results);
 			}
 		});
 

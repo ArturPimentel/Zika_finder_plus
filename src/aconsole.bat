@@ -1,1 +1,0 @@
-C:\Users\"Artur Pimentel"\Anaconda2\python.exe

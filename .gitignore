@@ -1,5 +1,3 @@
 data/
 apikeys/
-src/apy.bat
-src/aconsole.bat
-src/roc_drawer.bat
+src/bat/

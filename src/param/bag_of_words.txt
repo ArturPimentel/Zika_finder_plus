@@ -1,0 +1,83 @@
+& English,Portuguese,Spanish
+#######################################
+$ Infection
+getting,ficando,tengo
+got,fiquei,tenía
+recovered,recuperei,recuperado
+have,to c,han
+having,tô c,habiendo
+had,tava c,había
+has,ta c,ha
+catching,pegando,conseguir
+catch,pega,conseguido
+cured,curado,curado
+infected,infectado,infectado
+#######################################
+$ Possesion
+dengue,dengue,dengue
+sick,doente,enfermo
+epidemic,epidemia,epidemia
+#######################################
+$ Concern
+afraid,com medo,asustado
+worried,preocupado,preocupado
+scared,c medo,preocupado
+fear,temo,miedo
+worry,preocupação,preocupación
+nervous,nervoso,nerviosa
+dread,medo,miedo
+dreaded,temível,temible
+terrified,aterrorizado,aterrado
+#######################################
+$ Past tense
+was,tava,era
+did,fiz,hizo
+had,tive,tenía
+got,peguei,conseguido
+were,tava,era
+#######################################
+$ Present tense
+is,é,es
+am,sou,soy
+are,somos,somos
+are,são,son
+have,têm,tenemos
+has,tem,tiene
+#######################################
+$ Self
+I,eu,yo
+I’ve,eu tinha,yo tenía
+I’d,eu tive,yo tenía
+I’m,eu tô,estoy
+im,eu to,estoy
+my,meu,mi
+my,minha,mi
+#######################################
+$ Others
+your,seu,su
+your,sua,su
+everyone,todo mundo,todos
+you,você,usted
+it,isso,es
+its,dele,su
+u,vc,tu
+her,dela,ella
+he,ele,él
+she,ela,ella
+he’s,ele ta,él es
+she’s,ela ta,ella es
+they,eles,ellos
+they,elas,ellas
+you’re,você tá,usted es
+she’ll,ela vai,ella va
+he’ll,ele vai,él va
+husband,marido,marido
+wife,esposa,esposa
+brother,irmão,hermano
+sister,irmã,hermana
+people,pessoas,gente
+kid,filho,niño
+kids,fihos,niños
+children,filhas,niñas
+son,filho,hijo
+daughter,filha,hija

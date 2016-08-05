@@ -18,7 +18,7 @@ var greenIcon = new L.Icon({
 });
 
 var xmlhttp = new XMLHttpRequest();
-var url = "dengue_500tweets.csv";
+var url = "dengue_golden_tweets_only_positives.csv";
 var tweets;
 
 xmlhttp.onreadystatechange = function() {
@@ -44,7 +44,7 @@ xmlhttp.open("GET", url, true);
 xmlhttp.send();
 
 var xmlhttpZika = new XMLHttpRequest();
-var urlZika = "zika_500tweets.csv";
+var urlZika = "dengue_golden_tweets2_only_positives.csv";
 var tweetsZika;
 
 xmlhttpZika.onreadystatechange = function() {
